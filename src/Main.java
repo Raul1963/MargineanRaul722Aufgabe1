@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Main {
     static class FallAkten {
@@ -41,7 +40,11 @@ public class Main {
         List<FallAkten> eintraege = lesenDatei("src/fallakten.tsv");
         System.out.println(eintraege);
         // Aufgabe b: Studierende mit einem bestimmten Anfangsbuchstaben anzeigen
-}
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Geben Sie einen Großbuchstaben ein: ");
+        char buchstabe = scanner.next().charAt(0);
+        anzeigenPatientenMitNameBeginnendMitLetter(eintraege, buchstabe);
+    }
 
     // Methode zum Einlesen der Datei
     public static List<FallAkten> lesenDatei(String dateiname) throws IOException {
@@ -61,9 +64,17 @@ public class Main {
                 krankenhaus += krankenhaus + felder[j].trim();
                 j++;
             }
-            eintraege.add(new FallAkten(id, patient, patient, diagnose, date,krankenhaus));
+            eintraege.add(new FallAkten(id, patient, symptom, diagnose, date,krankenhaus));
         }
         return eintraege;
+    }
+
+    public static void anzeigenPatientenMitNameBeginnendMitLetter(List<FallAkten> eintraege, char buchstabe) {
+        eintraege.stream()
+                .map(e -> e.patient)
+                .filter(name -> name.startsWith(String.valueOf(buchstabe)))
+                .distinct()
+                .forEach(System.out::println);
     }
 
 
